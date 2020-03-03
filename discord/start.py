@@ -679,4 +679,4 @@ async def on_message(message):
         embed.set_footer(text="요청자: " + str(message.author))
         await message.channel.send(embed=embed)
 
-client.run('NjgwNjk0NzYzMDM2NzM3NTM2.XlDobg.PqT_o5NMmA4atyRZl1WKVdGISD8')
+client.run(TOKEN)
