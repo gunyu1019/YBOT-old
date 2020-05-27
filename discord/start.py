@@ -7,7 +7,8 @@ import sys
 import urllib
 import time
 
-from discord.ext import commands
+# from discord.ext import commands
+# - discord.py 업데이트 되면서 생긴 기능들이라서 쓰면 좋은데 선언만 해두고 안쓰는 이유가 궁금하다..
 
 def log_info(channel, user, message):
     Ftime = time.strftime('%Y-%m-%d %p %I:%M:%S', time.localtime(time.time()))
@@ -228,8 +229,8 @@ async def on_message(message):
             return
         else:
             try:
-                client_id = "5GsssVzuZ_jZ2HaOJ6TK"
-                client_secret = "u9jjDNZ516"
+                client_id = "#"       # 자신의 키는 소중히
+                client_secret = "#"
                 end_language = list_message[1]
                 text = message.content.replace('=번역 ' + end_language + ' ',' ',1) #분별작업
                 end_language_data = ['ko','en','ja','zh-CN','zh-TW','es','fr','ru','vi','th','id','de','it']
@@ -286,8 +287,9 @@ async def on_message(message):
                 await message.channel.send(embed=embed)
                 return
             else:
+                track_key = "#"
                 if list_message[1] == "목록":
-                    html = requests.get("http://info.sweettracker.co.kr/api/v1/companylist?t_key=cM2AMbcW6heHckZ4TeD84w").text
+                    html = requests.get(f"http://info.sweettracker.co.kr/api/v1/companylist?t_key={track_key}").text
                     answer = ''
                     list_company = html.split('Code') #"Code":"
                     for i in range(len(list_company)-1):
@@ -299,7 +301,7 @@ async def on_message(message):
                         test_data = list_message[2]
                     except:
                         try:
-                            html = requests.get("https://info.sweettracker.co.kr/api/v1/recommend?t_key=cM2AMbcW6heHckZ4TeD84w&t_invoice=" + list_message[1]).text
+                            html = requests.get(f"https://info.sweettracker.co.kr/api/v1/recommend?t_key={track_key}w&t_invoice={list_message[1]}").text
                             company = html.split('"Code":"')[1].split('"')[0]
                         except:
                             embed = discord.Embed(title='에러', description='택배사 조회에 실패하였습니다. 택배회사를 기재해주시기 바랍니다.', color=0x00aaaa)
@@ -307,7 +309,7 @@ async def on_message(message):
                             return
                     else:
                         company = "111"
-                        html = requests.get("http://info.sweettracker.co.kr/api/v1/companylist?t_key=cM2AMbcW6heHckZ4TeD84w").text
+                        html = requests.get(f"http://info.sweettracker.co.kr/api/v1/companylist?t_key={track_key}").text
                         list_company = html.split('Code')
                         for i in range(len(list_company)-1):
                             if list_message[2] ==html.split('"Name":"')[i+1].split('"')[0] :
@@ -316,8 +318,8 @@ async def on_message(message):
                             embed = discord.Embed(title='에러', description='존재하지 않는 택배사입니다. 다시한번 확인해주시기 바랍니다. ( "=택배 목록" )', color=0x00aaaa)
                             await message.channel.send(embed=embed)
                             return
-                    data = 't_key=cM2AMbcW6heHckZ4TeD84w&t_code=' + company + '&t_invoice=' + list_message[1]
-                    html = requests.get("https://info.sweettracker.co.kr/api/v1/trackingInfo?" + data).text
+                    data = f"t_key={track_key}&t_code={company}&t_invoice={list_message[1]}"
+                    html = requests.get(f"https://info.sweettracker.co.kr/api/v1/trackingInfo?{data}").text
                     try:
                         test_data = html.split('"senderName":"')[1].split('"')[0]
                     except:
